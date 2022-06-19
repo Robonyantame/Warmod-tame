@@ -699,6 +699,65 @@ public void OnPluginStart()
 	CreateTimer(15.0, HelpText, 0, TIMER_REPEAT);
 }
 
+void Check_config ()
+{
+	if (GetConVarInt(game_type) == 0) 
+	{
+		// 竞技类型
+		if (GetConVarInt(game_mode) == 0)
+		{ 
+			// 休闲模式
+			ServerCommand("exec gamemode_casual.cfg");
+		} 
+		else if (GetConVarInt(game_mode) == 1)
+		{ 
+			// 竞技模式
+			ServerCommand("exec gamemode_competitive_server.cfg");
+		} 
+		else if (GetConVarInt(game_mode) == 2)
+		{ 
+			// 搭档模式
+			ServerCommand("exec gamemode_competitive2v2.cfg");
+		} 
+		else 
+		{
+				// 识别不到就换成默认竞技config
+			ServerCommand("exec gamemode_competitive_server.cfg");
+		}
+
+	} 
+	else if(GetConVarInt(game_type) == 1) 
+	{
+		// 休闲类型
+		if (GetConVarInt(game_mode) == 0)
+		{ 
+			// 军备竞赛
+			ServerCommand("exec gamemode_armsrace.cfg");
+		}
+		else if (GetConVarInt(game_mode) == 1)
+		{ 
+			// 休闲爆破模式
+			ServerCommand("exec gamemode_demolition.cfg");
+		}
+		else if (GetConVarInt(game_mode) == 2)
+		{ 
+			// 死亡竞赛模式
+			ServerCommand("exec gamemode_deathmatch.cfg");
+		}
+		else 
+		{
+			// 识别不到就换成默认休闲爆破模式config
+			ServerCommand("exec gamemode_demolition.cfg");
+		}
+
+	} 
+	else 
+	{
+		// 识别不到就换成默认竞技config
+		ServerCommand("exec gamemode_competitive_server.cfg");
+	}
+}
+
 public void OnLibraryAdded(const char[]name)
 {
 	if (StrEqual(name, "updater"))
@@ -776,6 +835,8 @@ public void OnMapStart()
 		StartSQL(0);
 	}
 	
+	Check_config();
+
 	// reset any matches
 	ResetMatch(true, false);
 	g_bRecording = false;
@@ -789,6 +850,7 @@ public void OnMapStart()
 
 public void OnMapEnd()
 {
+	Check_config();
 	CloseHandle(g_MapVetoed);
 }
 
@@ -1038,8 +1100,10 @@ void ResetMatch(bool silent, bool complete) {
 		KillTimer(g_h_stored_timer_def);
 		g_h_stored_timer_def = INVALID_HANDLE;
 	}
-	UpdateStatus();
 	
+	UpdateStatus();
+	Check_config();
+
 	// stop tv recording after 5 seconds
 	CreateTimer(5.0, StopRecord);
 	CreateTimer(5.0, LogFileUpload);
@@ -1126,7 +1190,9 @@ void ResetHalf(bool silent)
 		ReadySystem(false);
 		ShowInfo(0, false, false, 1);
 	}
-	
+
+	Check_config();
+
 	if (!silent)
 	{
 		// display message for players
@@ -2294,65 +2360,6 @@ public Action OverTime(int client, int args)
 	return Plugin_Handled;
 }
 
-void Check_config ()
-{
-	if (GetConVarInt(game_type) == 0) 
-	{
-		// 竞技类型
-		if (GetConVarInt(game_mode) == 0)
-		{ 
-			// 休闲模式
-			ServerCommand("exec gamemode_casual.cfg");
-		} 
-		else if (GetConVarInt(game_mode) == 1)
-		{ 
-			// 竞技模式
-			ServerCommand("exec gamemode_competitive_server.cfg");
-		} 
-		else if (GetConVarInt(game_mode) == 2)
-		{ 
-			// 搭档模式
-			ServerCommand("exec gamemode_competitive2v2.cfg");
-		} 
-		else 
-		{
-				// 识别不到就换成默认竞技config
-			ServerCommand("exec gamemode_competitive_server.cfg");
-		}
-
-	} 
-	else if(GetConVarInt(game_type) == 1) 
-	{
-		// 休闲类型
-		if (GetConVarInt(game_mode) == 0)
-		{ 
-			// 军备竞赛
-			ServerCommand("exec gamemode_armsrace.cfg");
-		}
-		else if (GetConVarInt(game_mode) == 1)
-		{ 
-			// 休闲爆破模式
-			ServerCommand("exec gamemode_demolition.cfg");
-		}
-		else if (GetConVarInt(game_mode) == 2)
-		{ 
-			// 死亡竞赛模式
-			ServerCommand("exec gamemode_deathmatch.cfg");
-		}
-		else 
-		{
-			// 识别不到就换成默认休闲爆破模式config
-			ServerCommand("exec gamemode_demolition.cfg");
-		}
-
-	} 
-	else 
-	{
-		// 识别不到就换成默认竞技config
-		ServerCommand("exec gamemode_competitive_server.cfg");
-	}
-}
-
 public Action Default_Offer(int client, int args)
 {
 	if (client == 0)
@@ -2495,6 +2502,7 @@ public Action ForceStart(int client, int args)
 		return Plugin_Handled;
 	}
 	// reset half and restart
+	Check_config();
 	ResetHalf(true);
 	ShowInfo(0, false, false, 1);
 	SetAllCancelled(false);
@@ -2528,6 +2536,7 @@ public Action ForceEnd(int client, int args)
 	}
 	
 	// reset match
+	Check_config();
 	ResetMatch(true, false);
 	
 	LogAction(client, -1, "\"force_end\" (player \"%L\")", client);
@@ -2849,7 +2858,8 @@ void DisplayScore(int client, int msgindex, bool priv)
 	}
 }
 
-public void GetScoreMsg(int client, char[] result, int maxlen, int t_score, int ct_score) {
+public void GetScoreMsg(int client, char[] result, int maxlen, int t_score, int ct_score) 
+{
 	SetGlobalTransTarget(client);
 	if (StrEqual(g_t_name, "")) {
 		Format(g_t_name, sizeof(g_t_name), DEFAULT_T_NAME);
@@ -5473,6 +5483,7 @@ public Action KnifeOn3(int client, int args)
 	SetAllCancelled(false);
 	ReadySystem(false);
 	ReadyChecked();
+	Check_config();
 	g_t_knife = true;
 	g_max_lock = true;
 	g_t_score = false;
