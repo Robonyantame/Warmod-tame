@@ -2346,6 +2346,62 @@ public Action Default_Offer(int client, int args)
 			ServerCommand("exec %s", match_config);
 		}
 		
+		if (GetConVarInt(game_type) == 0) 
+		{
+			// 竞技类型
+			if (GetConVarInt(game_mode) == 0)
+			{ 
+				// 休闲模式
+				ServerCommand("exec gamemode_casual.cfg");
+			} 
+			else if (GetConVarInt(game_mode) == 1)
+			{ 
+				// 竞技模式
+				ServerCommand("exec gamemode_competitive_server.cfg");
+			} 
+			else if (GetConVarInt(game_mode) == 2)
+			{ 
+				// 搭档模式
+				ServerCommand("exec gamemode_competitive2v2.cfg");
+			} 
+			else 
+			{
+				// 识别不到就换成默认竞技config
+				ServerCommand("exec gamemode_competitive_server.cfg");
+			}
+
+		} 
+		else if(GetConVarInt(game_type) == 1) 
+		{
+			// 休闲类型
+			if (GetConVarInt(game_mode) == 0)
+			{ 
+				// 军备竞赛
+				ServerCommand("exec gamemode_armsrace.cfg");
+			}
+			else if (GetConVarInt(game_mode) == 1)
+			{ 
+				// 休闲爆破模式
+				ServerCommand("exec gamemode_demolition.cfg");
+			}
+			else if (GetConVarInt(game_mode) == 2)
+			{ 
+				// 死亡竞赛模式
+				ServerCommand("exec gamemode_deathmatch.cfg");
+			}
+			else 
+			{
+				// 识别不到就换成默认休闲爆破模式config
+				ServerCommand("exec gamemode_demolition.cfg");
+			}
+
+		} 
+		else 
+		{
+			// 识别不到就换成默认竞技config
+			ServerCommand("exec gamemode_competitive_server.cfg");
+		}
+
 		g_h_stored_timer_def = CreateTimer(30.0, DefaultTimeout);
 		return Plugin_Handled;
 	}
@@ -2394,6 +2450,63 @@ public Action Default(int client, int args)
 	{
 		ServerCommand("exec %s", match_config);
 	}
+
+	if (GetConVarInt(game_type) == 0) 
+	{
+		// 竞技类型
+		if (GetConVarInt(game_mode) == 0)
+		{ 
+			// 休闲模式
+			ServerCommand("exec gamemode_casual.cfg");
+		} 
+		else if (GetConVarInt(game_mode) == 1)
+		{ 
+			// 竞技模式
+			ServerCommand("exec gamemode_competitive_server.cfg");
+		} 
+		else if (GetConVarInt(game_mode) == 2)
+		{ 
+			// 搭档模式
+			ServerCommand("exec gamemode_competitive2v2.cfg");
+		} 
+		else 
+		{
+				// 识别不到就换成默认竞技config
+			ServerCommand("exec gamemode_competitive_server.cfg");
+		}
+
+	} 
+	else if(GetConVarInt(game_type) == 1) 
+	{
+		// 休闲类型
+		if (GetConVarInt(game_mode) == 0)
+		{ 
+			// 军备竞赛
+			ServerCommand("exec gamemode_armsrace.cfg");
+		}
+		else if (GetConVarInt(game_mode) == 1)
+		{ 
+			// 休闲爆破模式
+			ServerCommand("exec gamemode_demolition.cfg");
+		}
+		else if (GetConVarInt(game_mode) == 2)
+		{ 
+			// 死亡竞赛模式
+			ServerCommand("exec gamemode_deathmatch.cfg");
+		}
+		else 
+		{
+			// 识别不到就换成默认休闲爆破模式config
+			ServerCommand("exec gamemode_demolition.cfg");
+		}
+
+	} 
+	else 
+	{
+		// 识别不到就换成默认竞技config
+		ServerCommand("exec gamemode_competitive_server.cfg");
+	}
+
 	return Plugin_Handled;
 }
 
@@ -8121,19 +8234,34 @@ public Action Veto_Setup(int client, int args)
 		if (GetConVarBool(wm_veto_knife))
 		{
 
-			if (GetConVarInt(game_type) == 0 && GetConVarInt(game_mode) == 0){ // 休闲模式
-				ServerCommand("exec gamemode_casual.cfg");
-			}else if (GetConVarInt(game_type) == 0 && GetConVarInt(game_mode) == 1){ // 竞技模式
+			if (GetConVarInt(game_type) == 0) {
+				if (GetConVarInt(game_mode) == 0){ // 休闲模式
+					ServerCommand("exec gamemode_casual.cfg");
+				} else if (GetConVarInt(game_mode) == 1){ // 竞技模式
+					ServerCommand("exec gamemode_competitive_server.cfg");
+				} else if (GetConVarInt(game_mode) == 2){ // 搭档模式
+					ServerCommand("exec gamemode_competitive2v2.cfg");
+				} else {
+					// 识别不到就换成默认竞技config
+					ServerCommand("exec gamemode_competitive_server.cfg");
+				}
+
+			} else if(GetConVarInt(game_type) == 1) {
+				if (GetConVarInt(game_mode) == 0){ // 军备竞赛
+					ServerCommand("exec gamemode_armsrace.cfg");
+				}else if (GetConVarInt(game_mode) == 1){ // 休闲爆破模式
+					ServerCommand("exec gamemode_demolition.cfg");
+				}else if (GetConVarInt(game_mode) == 2){ // 死亡竞赛模式
+					ServerCommand("exec gamemode_deathmatch.cfg");
+				}else {
+					// 识别不到就换成默认休闲爆破模式config
+					ServerCommand("exec gamemode_demolition.cfg");
+				}
+			} else {
+				// 识别不到就换成默认竞技config
 				ServerCommand("exec gamemode_competitive_server.cfg");
-			}else if (GetConVarInt(game_type) == 0 && GetConVarInt(game_mode) == 2){ // 搭档模式
-				ServerCommand("exec gamemode_competitive2v2.cfg");
-			}else if (GetConVarInt(game_type) == 1 && GetConVarInt(game_mode) == 0){ // 军备竞赛
-				ServerCommand("exec gamemode_armsrace.cfg");
-			}else if (GetConVarInt(game_type) == 1 && GetConVarInt(game_mode) == 1){ // 休闲爆破模式
-				ServerCommand("exec gamemode_demolition.cfg");
-			}else if (GetConVarInt(game_type) == 1 && GetConVarInt(game_mode) == 2){ // 死亡竞赛模式
-				ServerCommand("exec gamemode_deathmatch.cfg");
 			}
+
 
 			g_t_knife = true;
 			g_t_veto = true;
@@ -8204,23 +8332,6 @@ public Action Veto_Admin_Setup(int client, int args)
 	
 	if (GetConVarBool(wm_veto_knife))
 	{
-
-
-		if (GetConVarInt(game_type) == 0 && GetConVarInt(game_mode) == 0){ // 休闲模式
-			ServerCommand("exec gamemode_casual.cfg");
-		}else if (GetConVarInt(game_type) == 0 && GetConVarInt(game_mode) == 1){ // 竞技模式
-			ServerCommand("exec gamemode_competitive_server.cfg");
-		}else if (GetConVarInt(game_type) == 0 && GetConVarInt(game_mode) == 2){ // 搭档模式
-			ServerCommand("exec gamemode_competitive2v2.cfg");
-		}else if (GetConVarInt(game_type) == 1 && GetConVarInt(game_mode) == 0){ // 军备竞赛
-			ServerCommand("exec gamemode_armsrace.cfg");
-		}else if (GetConVarInt(game_type) == 1 && GetConVarInt(game_mode) == 1){ // 休闲爆破模式
-			ServerCommand("exec gamemode_demolition.cfg");
-		}else if (GetConVarInt(game_type) == 1 && GetConVarInt(game_mode) == 2){ // 死亡竞赛模式
-			ServerCommand("exec gamemode_deathmatch.cfg");
-		}
-
-
 		g_t_knife = true;
 		g_t_veto = true;
 		PrintToChatAll("\x01 \x09[\x04%s\x09]\x01 Veto Knife!", chat_prefix);
