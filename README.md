@@ -1,5 +1,5 @@
 # Warmod-tame
-(中文)[https://github.com/Robonyantame/Warmod-tame/blob/main/README_zh.md]
+[中文](https://github.com/Robonyantame/Warmod-tame/blob/main/README_zh.md)
 
 ---  
   
