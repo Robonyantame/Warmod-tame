@@ -2294,6 +2294,65 @@ public Action OverTime(int client, int args)
 	return Plugin_Handled;
 }
 
+void Check_config ()
+{
+	if (GetConVarInt(game_type) == 0) 
+	{
+		// 竞技类型
+		if (GetConVarInt(game_mode) == 0)
+		{ 
+			// 休闲模式
+			ServerCommand("exec gamemode_casual.cfg");
+		} 
+		else if (GetConVarInt(game_mode) == 1)
+		{ 
+			// 竞技模式
+			ServerCommand("exec gamemode_competitive_server.cfg");
+		} 
+		else if (GetConVarInt(game_mode) == 2)
+		{ 
+			// 搭档模式
+			ServerCommand("exec gamemode_competitive2v2.cfg");
+		} 
+		else 
+		{
+				// 识别不到就换成默认竞技config
+			ServerCommand("exec gamemode_competitive_server.cfg");
+		}
+
+	} 
+	else if(GetConVarInt(game_type) == 1) 
+	{
+		// 休闲类型
+		if (GetConVarInt(game_mode) == 0)
+		{ 
+			// 军备竞赛
+			ServerCommand("exec gamemode_armsrace.cfg");
+		}
+		else if (GetConVarInt(game_mode) == 1)
+		{ 
+			// 休闲爆破模式
+			ServerCommand("exec gamemode_demolition.cfg");
+		}
+		else if (GetConVarInt(game_mode) == 2)
+		{ 
+			// 死亡竞赛模式
+			ServerCommand("exec gamemode_deathmatch.cfg");
+		}
+		else 
+		{
+			// 识别不到就换成默认休闲爆破模式config
+			ServerCommand("exec gamemode_demolition.cfg");
+		}
+
+	} 
+	else 
+	{
+		// 识别不到就换成默认竞技config
+		ServerCommand("exec gamemode_competitive_server.cfg");
+	}
+}
+
 public Action Default_Offer(int client, int args)
 {
 	if (client == 0)
@@ -6824,65 +6883,6 @@ void SwitchTeamNames()
 	EscapeString(g_t_name_escaped, sizeof(g_t_name_escaped));
 	Format(g_ct_name_escaped, sizeof(g_ct_name_escaped), "%s", g_ct_name);
 	EscapeString(g_ct_name_escaped, sizeof(g_ct_name_escaped));
-}
-
-void Check_config ()
-{
-	if (GetConVarInt(game_type) == 0) 
-	{
-		// 竞技类型
-		if (GetConVarInt(game_mode) == 0)
-		{ 
-			// 休闲模式
-			ServerCommand("exec gamemode_casual.cfg");
-		} 
-		else if (GetConVarInt(game_mode) == 1)
-		{ 
-			// 竞技模式
-			ServerCommand("exec gamemode_competitive_server.cfg");
-		} 
-		else if (GetConVarInt(game_mode) == 2)
-		{ 
-			// 搭档模式
-			ServerCommand("exec gamemode_competitive2v2.cfg");
-		} 
-		else 
-		{
-				// 识别不到就换成默认竞技config
-			ServerCommand("exec gamemode_competitive_server.cfg");
-		}
-
-	} 
-	else if(GetConVarInt(game_type) == 1) 
-	{
-		// 休闲类型
-		if (GetConVarInt(game_mode) == 0)
-		{ 
-			// 军备竞赛
-			ServerCommand("exec gamemode_armsrace.cfg");
-		}
-		else if (GetConVarInt(game_mode) == 1)
-		{ 
-			// 休闲爆破模式
-			ServerCommand("exec gamemode_demolition.cfg");
-		}
-		else if (GetConVarInt(game_mode) == 2)
-		{ 
-			// 死亡竞赛模式
-			ServerCommand("exec gamemode_deathmatch.cfg");
-		}
-		else 
-		{
-			// 识别不到就换成默认休闲爆破模式config
-			ServerCommand("exec gamemode_demolition.cfg");
-		}
-
-	} 
-	else 
-	{
-		// 识别不到就换成默认竞技config
-		ServerCommand("exec gamemode_competitive_server.cfg");
-	}
 }
 
 public Action SwapAll(int client, int args)
