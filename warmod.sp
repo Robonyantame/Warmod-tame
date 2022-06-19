@@ -721,7 +721,7 @@ void Check_config ()
 		} 
 		else 
 		{
-				// 识别不到就换成默认竞技config
+			// 识别不到就换成默认竞技config
 			ServerCommand("exec gamemode_competitive_server.cfg");
 		}
 
@@ -1100,7 +1100,7 @@ void ResetMatch(bool silent, bool complete) {
 		KillTimer(g_h_stored_timer_def);
 		g_h_stored_timer_def = INVALID_HANDLE;
 	}
-	
+
 	UpdateStatus();
 	Check_config();
 
