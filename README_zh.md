@@ -4,3 +4,6 @@
 
 # 特征
 - 识别csgo服务器的游戏模式自动更改config设定（修改了关于默认config的设置）
+
+# 问题
+- 在warmod的config中，你必须要把关于`mp_maxrounds`的东西删掉
