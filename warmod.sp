@@ -702,9 +702,6 @@ public void OnPluginStart()
 void Check_config ()
 {
 
-	game_mode = FindConVar("game_mode");	
-	game_type = FindConVar("game_type");
-
 	if (GetConVarInt(game_type) == 0) 
 	{
 		// 竞技类型
