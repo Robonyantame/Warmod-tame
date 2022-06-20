@@ -701,6 +701,10 @@ public void OnPluginStart()
 
 void Check_config ()
 {
+
+	game_mode = FindConVar("game_mode");	
+	game_type = FindConVar("game_type");
+
 	if (GetConVarInt(game_type) == 0) 
 	{
 		// 竞技类型
@@ -5328,6 +5332,8 @@ void LiveOn3(bool e_war)
 stock bool LiveOn3Override()
 {
 	
+	Check_config();
+
 	if (!g_half_swap)
 	{
 		ServerCommand("mp_halftime_pausetimer 0");
@@ -6300,6 +6306,8 @@ public Action Stay(int client, int args)
 			UpdateStatus();
 		}
 	}
+
+	Check_config();
 	return Plugin_Handled;
 }
 
@@ -6390,6 +6398,8 @@ public Action Switch(int client, int args)
 			UpdateStatus();
 		}
 	}
+
+	Check_config();
 	return Plugin_Handled;
 }
 
