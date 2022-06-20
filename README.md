@@ -3,6 +3,10 @@
 
 ---  
 
+My English is not good, so the following text is translated using deepl.com
+
+---
+
 A little modification of the original warmod  
 Original warmod forum link: https://forums.alliedmods.net/showthread.php?t=225474
 
