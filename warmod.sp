@@ -5315,6 +5315,7 @@ void LiveOn3(bool e_war)
 		ServerCommand("exec %s", match_config);
 	}
 	
+	Check_config();
 	ReadyChecked();
 	g_start = true;
 	g_max_lock = true;
